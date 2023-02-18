@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CardFormTest {
     @Test
-    void shouldTest(){
+    void shouldTestValid(){
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $("span[data-test-id=city] input").setValue ("Пермь");
