@@ -5,6 +5,8 @@ import org.openqa.selenium.Keys;
 
 import java.nio.channels.Selector;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.visible;
@@ -12,22 +14,34 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class CardFormTest {
+
+    public String generateDate(int days) {
+        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    String planningDate = generateDate(4);
+
+
     @Test
-    void shouldTestValid(){
+    void shouldTestValid() {
+
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        $("span[data-test-id=city] input").setValue ("Пермь");
+        $("span[data-test-id=city] input").setValue("Пермь");
         $("span[data-test-id=date] input").doubleClick();
         $("span[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
-        $("span[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("span[data-test-id=name] input").setValue("Ольга Бражкина");
         $("span[data-test-id=phone] input").setValue("+71234567891");
         $("[data-test-id=agreement]").click();
         $x("//span[text()='Забронировать']").click();
-        $x ("//div[contains(text(), 'Успешно!')]").shouldBe(visible, Duration.ofSeconds(15));
-        $x ("//div[contains(text(), 'Встреча успешно забронирована на ')]").shouldBe(visible, Duration.ofSeconds(15));
+        $x("//div[contains(text(), 'Успешно!')]").shouldBe(visible, Duration.ofSeconds(15));
+        //$x("//div[contains(text(), 'Встреча успешно забронирована на ')]").shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id=notification]").shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate));
+        $("[data-test-id=notification]").shouldBe(visible);
 
     }
+
 
     @Test
     void shouldWithoutCity() {
@@ -35,7 +49,7 @@ public class CardFormTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Березники");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("[data-test-id=name] input").setValue("Ольга Бражкина");
         $("[data-test-id=phone] input").setValue("+71234567891");
         $("[data-test-id=agreement]").click();
@@ -64,7 +78,7 @@ public class CardFormTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Пермь");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] input").setValue("20.02.2023");
+        $("span[data-test-id=date] input").setValue(generateDate(1));
         $("[data-test-id=name] input").setValue("Ольга Бражкина");
         $("[data-test-id=phone] input").setValue("+71234567891");
         $("[data-test-id=agreement]").click();
@@ -79,7 +93,7 @@ public class CardFormTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Пермь");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] input").sendKeys("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("[data-test-id=name] input").setValue("Olga Brazhkina");
         $("[data-test-id=phone] input").setValue("+79181102009");
         $("[class=checkbox__box]").click();
@@ -92,7 +106,7 @@ public class CardFormTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Пермь");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] input").sendKeys("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("[data-test-id=name] input").setValue("Ольга-Бражкина");
         $("[data-test-id=phone] input").setValue("+79181102009");
         $("[class=checkbox__box]").click();
@@ -107,7 +121,7 @@ public class CardFormTest {
         $("[data-test-id=city] input").setValue("Пермь");
         $("span[data-test-id=date] input").doubleClick();
         $("span[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
-        $("span[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("[data-test-id=name] input").setValue("");
         $("[data-test-id=phone] input").setValue("+79181102009");
         $("[class=checkbox__box]").click();
@@ -122,7 +136,7 @@ public class CardFormTest {
         $("span[data-test-id=city] input").setValue ("Пермь");
         $("span[data-test-id=date] input").doubleClick();
         $("span[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
-        $("span[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("span[data-test-id=name] input").setValue("Ольга Бражкина");
         $("span[data-test-id=phone] input").setValue("+7123456789");
         $("[data-test-id=agreement]").click();
@@ -139,7 +153,7 @@ public class CardFormTest {
         $("span[data-test-id=city] input").setValue ("Пермь");
         $("span[data-test-id=date] input").doubleClick();
         $("span[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
-        $("span[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("span[data-test-id=name] input").setValue("Ольга Бражкина");
         $("span[data-test-id=phone] input").setValue("");
         $("[data-test-id=agreement]").click();
@@ -156,7 +170,7 @@ public class CardFormTest {
         $("span[data-test-id=city] input").setValue ("Пермь");
         $("span[data-test-id=date] input").doubleClick();
         $("span[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
-        $("span[data-test-id=date] input").setValue("24.02.2023");
+        $("span[data-test-id=date] input").setValue(planningDate);
         $("span[data-test-id=name] input").setValue("Ольга Бражкина");
         $("span[data-test-id=phone] input").setValue("+71234567891");
         $x("//span[text()='Забронировать']").click();
